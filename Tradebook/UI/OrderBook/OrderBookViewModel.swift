@@ -24,8 +24,7 @@ public class OrderBookDisplayItem: ObservableObject, Identifiable {
     }
     
     public var relativeVolume: Double {
-        let val = (Double(self.quantity)/Double(self.totalVolume)) * 100.0
-        return val
+        return (Double(self.quantity)/Double(self.totalVolume)) * 100.0
     }
 }
 

@@ -18,6 +18,7 @@
 		542CA7AA2BB29DE500BD317C /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7A92BB29DE500BD317C /* MainViewModel.swift */; };
 		542CA7AD2BB2A6AB00BD317C /* OrderBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7AC2BB2A6AB00BD317C /* OrderBookView.swift */; };
 		542CA7AF2BB2A7C700BD317C /* OrderBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7AE2BB2A7C700BD317C /* OrderBookViewModel.swift */; };
+		542CA7B42BB349E800BD317C /* Color+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7B32BB349E800BD317C /* Color+Asset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		542CA7A92BB29DE500BD317C /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		542CA7AC2BB2A6AB00BD317C /* OrderBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBookView.swift; sourceTree = "<group>"; };
 		542CA7AE2BB2A7C700BD317C /* OrderBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBookViewModel.swift; sourceTree = "<group>"; };
+		542CA7B32BB349E800BD317C /* Color+Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Asset.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 		542CA78C2BB291C000BD317C /* Tradebook */ = {
 			isa = PBXGroup;
 			children = (
+				542CA7B22BB349DB00BD317C /* Utils */,
 				542CA7A52BB29DC300BD317C /* UI */,
 				542CA79B2BB2973200BD317C /* API */,
 				542CA78D2BB291C000BD317C /* TradebookApp.swift */,
@@ -117,6 +120,14 @@
 				542CA7AE2BB2A7C700BD317C /* OrderBookViewModel.swift */,
 			);
 			path = OrderBook;
+			sourceTree = "<group>";
+		};
+		542CA7B22BB349DB00BD317C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				542CA7B32BB349E800BD317C /* Color+Asset.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				542CA7B42BB349E800BD317C /* Color+Asset.swift in Sources */,
 				542CA7AA2BB29DE500BD317C /* MainViewModel.swift in Sources */,
 				542CA7A82BB29DDB00BD317C /* MainView.swift in Sources */,
 				542CA79F2BB2975700BD317C /* URL+Extensions.swift in Sources */,

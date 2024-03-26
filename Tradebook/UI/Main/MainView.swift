@@ -15,6 +15,5 @@ public struct MainView: View {
             OrderBookView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.blue)
     }
 }
