@@ -11,25 +11,47 @@ struct OrderBookView: View {
     @StateObject var viewModel = OrderBookViewModel()
 
     public var body: some View {
-        GeometryReader { geometry in
+        VStack(spacing: 0) {
+            header
+            
+            Divider()
+                .frame(height: 1)
+                .overlay(Color.gray.opacity(0.2))
+
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
                     ForEach($viewModel.buyOrders) { order in
                         buyOrderCell(order.wrappedValue)
                     }
                 }
+                .clipped()
                 
                 VStack(spacing: 0) {
                     ForEach($viewModel.sellOrders) { order in
                         sellOrderCell(order.wrappedValue)
                     }
                 }
+                .clipped()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    func buyOrderCell(_ order: OrderBookDisplayItem) -> some View {
+    private var header: some View {
+        HStack(spacing: 0) {
+            Spacer()
+            Text("Qty")
+            Spacer()
+            Text("Price(USD)")
+            Spacer()
+            Text("Qty")
+            Spacer()
+        }
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity)
+    }
+    
+    private func buyOrderCell(_ order: OrderBookDisplayItem) -> some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 Text("\(order.quantity)")
@@ -46,7 +68,7 @@ struct OrderBookView: View {
         }
     }
     
-    func sellOrderCell(_ order: OrderBookDisplayItem) -> some View {
+    private func sellOrderCell(_ order: OrderBookDisplayItem) -> some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 ZStack {
@@ -82,7 +104,7 @@ struct ProgressView: View {
         }
     }
     
-    func getProgressBarWidth(geometry: GeometryProxy, progress: Double) -> CGFloat {
+    private func getProgressBarWidth(geometry: GeometryProxy, progress: Double) -> CGFloat {
         let originalWidth = geometry.size.width
         let width = (originalWidth * progress)/100.0
         return min(originalWidth, width)
