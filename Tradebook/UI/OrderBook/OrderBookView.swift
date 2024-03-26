@@ -8,19 +8,33 @@
 import SwiftUI
 
 struct OrderBookView: View {
-    @ObservedObject var viewModel = OrderBookViewModel()
+    @StateObject var viewModel = OrderBookViewModel()
 
     public var body: some View {
-        VStack() {
-            Text("Something")
-            ForEach($viewModel.buyOrders.orders) { order in
-                HStack {
-                    Text("\(order.size)")
-                    Text("\(order.price)")
+        HStack {
+            VStack() {
+                ForEach(viewModel.buyOrders) { order in
+                    HStack {
+                        Text("\(order.size)")
+                        Spacer()
+                        Text("\(order.price)")
+                    }
                 }
+
+                Spacer()
             }
 
-            Spacer()
+            VStack() {
+                ForEach(viewModel.sellOrders) { order in
+                    HStack {
+                        Text("\(order.size)")
+                        Spacer()
+                        Text("\(order.price)")
+                    }
+                }
+
+                Spacer()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.yellow)
