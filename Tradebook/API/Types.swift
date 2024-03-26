@@ -37,7 +37,7 @@ struct OrderBook: Decodable {
         var symbol: String
         var id: Int64
         var side: Side
-        var size: Int
+        var size: Int64
         var price: Double
         var timestamp: String
     }
