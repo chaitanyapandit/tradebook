@@ -9,7 +9,7 @@ import Foundation
 
 extension URL {
     static let baseURL: URL = {
-        return URL(string: "wss://ws.bitmex.com/realtime?subscribe=instrument,orderBookL2:XBTUSD")!
+        return URL(string: "wss://ws.bitmex.com/realtime")!
     }()
     
     static func request(_ params: [String: String] = [:]) throws -> URLRequest {

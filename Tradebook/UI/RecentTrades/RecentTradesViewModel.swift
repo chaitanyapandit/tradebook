@@ -8,11 +8,12 @@
 import Foundation
 import Combine
 
-public class RecentTradesItem: ObservableObject, Identifiable {
+public class RecentTradesItem: Identifiable {
     var price: Double
     var quantity: Int64
     var time: Date
     var isBuy: Bool
+    var flashed: Bool = false
     
     init(data: TradeData) {
         self.price = data.price

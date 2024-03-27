@@ -43,7 +43,9 @@ struct RecentTradesView: View {
     private func cell(_ item: RecentTradesItem) -> some View {
         GeometryReader { geometry in
             ZStack {
-                BackgroundView(color: item.isBuy ? Color.ui.buyBackground : Color.ui.sellBackground)
+                if !item.flashed {
+                    BackgroundView(item: item)
+                }
 
                 HStack(spacing: 0) {
                     Text(String(format: "%.1f", item.price))
@@ -66,19 +68,24 @@ struct RecentTradesView: View {
 
 struct BackgroundView: View {
     @State var opacity: Double = 1
-    @State var color: Color
+    @State var item: RecentTradesItem
     
     public var body: some View {
         GeometryReader { geometry in
             Rectangle()
                 .opacity(opacity)
-                .foregroundColor(color)
+                .foregroundColor(backgroundColor)
                 .onAppear {
+                    item.flashed = true
                     let baseAnimation = Animation.easeInOut(duration: 0.2)
                     withAnimation(baseAnimation) {
                         opacity = 0
                     }
                 }
         }
+    }
+    
+    var backgroundColor: Color {
+        return item.isBuy ? .ui.buyBackground : .ui.sellBackground
     }
 }

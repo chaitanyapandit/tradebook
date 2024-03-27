@@ -69,7 +69,7 @@ private struct Cell: View {
                 ZStack {
                     ProgressView(color: backgroundColor, progress: item.relativeVolume, direction: item.isBuy ? .leftToRight : .rightToLeft)
                     Text(String(format: "%.2f", item.price))
-                        .foregroundColor(Color.ui.sellForeground)
+                        .foregroundColor(foregroundColor)
                         .fontWeight(.bold)
                 }
                 .frame(width: geometry.size.width/2.0)

@@ -28,6 +28,8 @@ public class API {
         }
     }
     private var pendingSubscriptions: [WSTopic] = []
+    private var reconnectAttempt = 0
+    private var lastReconnectAt: Date? = nil
     
     public var publisher: PassthroughSubject<WSMessage, Never> = .init()
     
@@ -81,6 +83,27 @@ public class API {
     private func handleError(_ error: Error?) {
         print("!!!! Error: \(error?.localizedDescription ?? "Unknown")")
     }
+    
+    private func reconnect() {
+        guard reconnectAttempt < 3 else {
+            print("!!! Exceeded max reconnect attempts")
+            return
+        }
+        
+        if let lastReconnect = lastReconnectAt,
+           Date().timeIntervalSince(lastReconnect) < 3 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(reconnectAttempt), execute: {[weak self] in
+                self?.reconnect()
+            })
+            
+            return
+        }
+        
+        print("!!! Reconnecting...")
+        reconnectAttempt = reconnectAttempt + 1
+        disconnect()
+        try? connect()
+    }
 }
 
 extension API: WebSocketDelegate {
@@ -91,16 +114,19 @@ extension API: WebSocketDelegate {
 
             case .connected(_):
                 state = .connected
+                reconnectAttempt = 0
                 subscribe()
             
-            case .disconnected(let reason, let code):
+            case .disconnected(_, _):
                 socket = nil
                 state = .disconnected
+                reconnect()
             
             case .error(let error):
                 socket = nil
                 state = .disconnected
                 handleError(error)
+                reconnect()
 
         default:
             print("<<<< TODO: event: \(event)")
