@@ -48,7 +48,7 @@ struct RecentTradesView: View {
                 HStack(spacing: 0) {
                     Text(String(format: "%.1f", item.price))
                         .frame(width: geometry.size.width/3.0)
-                        .fontWeight(.medium)
+                        .fontWeight(.bold)
                     
                     Text(String(item.quantity))
                         .frame(width: geometry.size.width/3.0)
@@ -56,7 +56,7 @@ struct RecentTradesView: View {
 
                     Text("\(item.displayTime)")
                         .frame(width: geometry.size.width/3.0)
-                        .fontWeight(.medium)
+                        .fontWeight(.regular)
                 }
                 .foregroundColor(item.isBuy ? Color.ui.buyForeground : Color.ui.sellForeground)
             }

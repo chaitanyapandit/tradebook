@@ -21,18 +21,20 @@ struct OrderBookView: View {
 
                 HStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        ForEach($viewModel.buyOrders) { order in
-                            buyOrderCell(order.wrappedValue)
+                        ForEach($viewModel.buyOrders) { item in
+                            Cell(item: item.wrappedValue)
                                 .frame(maxHeight: geometry.size.height/Double(viewModel.maxItems))
                         }
+                        Spacer()
                     }
                     .clipped()
                     
                     VStack(spacing: 0) {
-                        ForEach($viewModel.sellOrders) { order in
-                            sellOrderCell(order.wrappedValue)
+                        ForEach($viewModel.sellOrders) { item in
+                            Cell(item: item.wrappedValue)
                                 .frame(maxHeight: geometry.size.height/Double(viewModel.maxItems))
                         }
+                        Spacer()
                     }
                     .clipped()
                 }
@@ -56,44 +58,44 @@ struct OrderBookView: View {
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
     }
-    
-    private func buyOrderCell(_ order: OrderBookItem) -> some View {
-        GeometryReader { geometry in
-            HStack(spacing: 0) {
-                Text("\(order.quantity)")
-                    .frame(width: geometry.size.width/2.0)
-                    .fontWeight(.medium)
+}
 
-                ZStack(alignment: .center) {
-                    ProgressView(color: .ui.buyBackground, progress: order.relativeVolume, direction: .leftToRight)
-                    Text(String(format: "%.2f", order.price))
-                        .foregroundColor(Color.ui.buyForeground)
-                        .fontWeight(.bold)
-                }
-            }
-        }
-    }
+private struct Cell: View {
+    @StateObject var item: OrderBookItem
     
-    private func sellOrderCell(_ order: OrderBookItem) -> some View {
+    public var body: some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 ZStack {
-                    ProgressView(color: .ui.sellBackground, progress: order.relativeVolume, direction: .rightToLeft)
-                    Text(String(format: "%.2f", order.price))
+                    ProgressView(color: backgroundColor, progress: item.relativeVolume, direction: item.isBuy ? .leftToRight : .rightToLeft)
+                    Text(String(format: "%.2f", item.price))
                         .foregroundColor(Color.ui.sellForeground)
                         .fontWeight(.bold)
                 }
                 .frame(width: geometry.size.width/2.0)
 
-                Text("\(order.quantity)")
+                Text("\(item.quantity)")
                     .frame(width: geometry.size.width/2.0)
                     .fontWeight(.medium)
             }
+            .environment(\.layoutDirection, direction)
         }
+    }
+    
+    var foregroundColor: Color {
+        return item.isBuy ? .ui.buyForeground : .ui.sellForeground
+    }
+    
+    var backgroundColor: Color {
+        return item.isBuy ? .ui.buyBackground : .ui.sellBackground
+    }
+    
+    var direction: LayoutDirection {
+        return item.isBuy ? .rightToLeft : .leftToRight
     }
 }
 
-struct ProgressView: View {
+private struct ProgressView: View {
     let color: Color
     let progress: Double
     let direction: LayoutDirection
@@ -110,7 +112,7 @@ struct ProgressView: View {
         }
     }
     
-    private func getProgressBarWidth(geometry: GeometryProxy, progress: Double) -> CGFloat {
+    func getProgressBarWidth(geometry: GeometryProxy, progress: Double) -> CGFloat {
         let originalWidth = geometry.size.width
         let width = (originalWidth * progress)/100.0
         return min(originalWidth, width)
