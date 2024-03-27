@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct RecentTradesView: View {
-    @StateObject var viewModel = RecentTradesViewModel()
-    
+    @StateObject var viewModel: RecentTradesViewModel
+
     public var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {

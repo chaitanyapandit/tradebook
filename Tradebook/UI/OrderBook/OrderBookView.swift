@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OrderBookView: View {
-    @StateObject var viewModel = OrderBookViewModel()
+    @StateObject var viewModel: OrderBookViewModel
 
     public var body: some View {
         GeometryReader { geometry in
