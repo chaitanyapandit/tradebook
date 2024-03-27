@@ -12,7 +12,8 @@ public struct MainView: View {
     
     public var body: some View {
         VStack {
-            OrderBookView()
+            // OrderBookView()
+            RecentTradesView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

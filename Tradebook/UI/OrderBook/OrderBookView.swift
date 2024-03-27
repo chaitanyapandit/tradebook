@@ -11,30 +11,36 @@ struct OrderBookView: View {
     @StateObject var viewModel = OrderBookViewModel()
 
     public var body: some View {
-        VStack(spacing: 0) {
-            header
-            
-            Divider()
-                .frame(height: 1)
-                .overlay(Color.gray.opacity(0.2))
-
-            HStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    ForEach($viewModel.buyOrders) { order in
-                        buyOrderCell(order.wrappedValue)
-                    }
-                }
-                .clipped()
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                header
                 
-                VStack(spacing: 0) {
-                    ForEach($viewModel.sellOrders) { order in
-                        sellOrderCell(order.wrappedValue)
+                Divider()
+                    .frame(height: 1)
+                    .overlay(Color.gray.opacity(0.2))
+
+                HStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        ForEach($viewModel.buyOrders) { order in
+                            buyOrderCell(order.wrappedValue)
+                                .frame(maxHeight: geometry.size.height/Double(viewModel.maxItems))
+                        }
                     }
+                    .clipped()
+                    
+                    VStack(spacing: 0) {
+                        ForEach($viewModel.sellOrders) { order in
+                            sellOrderCell(order.wrappedValue)
+                                .frame(maxHeight: geometry.size.height/Double(viewModel.maxItems))
+                        }
+                    }
+                    .clipped()
                 }
-                .clipped()
+                
+                Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private var header: some View {
@@ -51,7 +57,7 @@ struct OrderBookView: View {
         .frame(maxWidth: .infinity)
     }
     
-    private func buyOrderCell(_ order: OrderBookDisplayItem) -> some View {
+    private func buyOrderCell(_ order: OrderBookItem) -> some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 Text("\(order.quantity)")
@@ -68,7 +74,7 @@ struct OrderBookView: View {
         }
     }
     
-    private func sellOrderCell(_ order: OrderBookDisplayItem) -> some View {
+    private func sellOrderCell(_ order: OrderBookItem) -> some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 ZStack {

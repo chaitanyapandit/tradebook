@@ -8,15 +8,17 @@
 import Combine
 import Foundation
 
-public class OrderBookDisplayItem: ObservableObject, Identifiable {
+public class OrderBookItem: ObservableObject, Identifiable {
     var price: Double = 0.0
     var quantity: Int64 = 0
     var totalVolume: Int64 = 0
+    var isBuy: Bool = false
 
-    func addItem(_ item: OrderBook.Item) {
-        self.price = item.price
-        self.quantity = item.size
-        self.totalVolume = self.totalVolume + item.size
+    func update(data: OrderBookData) {
+        self.price = data.price
+        self.quantity = data.size
+        self.totalVolume = self.totalVolume + data.size
+        self.isBuy = data.side == .buy
     }
     
     public var id: Double {
@@ -29,51 +31,48 @@ public class OrderBookDisplayItem: ObservableObject, Identifiable {
 }
 
 public class OrderBookViewModel: ObservableObject {
-    private var api: API<OrderBook>? = nil
     private var cancellables = Set<AnyCancellable>()
     
-    @Published var buyOrders = [OrderBookDisplayItem]()
-    @Published var sellOrders = [OrderBookDisplayItem]()
+    @Published var buyOrders = [OrderBookItem]()
+    @Published var sellOrders = [OrderBookItem]()
+    var maxItems = 20
 
     init() {
-        self.api = API()
-        try? self.api?.connect()
+        try? API.shared.connect()
         
-        self.api?.publisher
-            .sink(receiveValue: {[weak self] order in
-                self?.processOrder(order)
-            })
+        API.shared.subscribe([WSTopic.orderBookL2XBTUSD])
+        
+        API.shared.publisher
+            .compactMap { message -> [OrderBookData]? in
+                let orderbookData: [OrderBookData] = message.data.compactMap({ data -> OrderBookData? in
+                    return try? data.to()
+                })
+                return orderbookData
+            }
+            .sink { [weak self] data in
+                self?.processOrders(data)
+            }
             .store(in: &cancellables)
     }
-    
-    private func processOrder(_ order: OrderBook) {
-        for item in order.data {
-            switch item.side {
-            case .buy:
-                processBuyOrder(item)
-            case .sell:
-                processSellOrder(item)
+        
+    private func processOrders(_ datas: [OrderBookData]) {
+        for data in datas {
+            if data.side == .buy {
+                let item = buyOrders.first { $0.price == data.price } ?? OrderBookItem()
+                item.update(data: data)
+                buyOrders.removeAll { $0.price == data.price }
+                buyOrders.append(item)
+            } else {
+                let item = sellOrders.first { $0.price == data.price } ?? OrderBookItem()
+                item.update(data: data)
+                sellOrders.removeAll { $0.price == data.price }
+                sellOrders.append(item)
             }
         }
-    }
-    
-    private func processBuyOrder(_ item: OrderBook.Item) {
-        let displayItem = buyOrders.first { $0.price == item.price } ?? OrderBookDisplayItem()
-        displayItem.addItem(item)
         
-        buyOrders.removeAll { $0.price == item.price }
-        buyOrders.append(displayItem)
         buyOrders.sort(by: { $0.price > $1.price})
-        buyOrders = Array(buyOrders.prefix(20))
-    }
-    
-    private func processSellOrder(_ item: OrderBook.Item) {
-        let displayItem = sellOrders.first { $0.price == item.price } ?? OrderBookDisplayItem()
-        displayItem.addItem(item)
-        
-        sellOrders.removeAll { $0.price == item.price }
-        sellOrders.append(displayItem)
+        buyOrders = Array(buyOrders.prefix(maxItems))
         sellOrders.sort(by: { $1.price > $0.price})
-        sellOrders = Array(sellOrders.prefix(20))
+        sellOrders = Array(sellOrders.prefix(maxItems))
     }
 }

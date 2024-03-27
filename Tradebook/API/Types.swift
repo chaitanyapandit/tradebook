@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AnyCodable
 
 public protocol Requestable {
    static func request() throws -> URLRequest
@@ -14,41 +15,69 @@ public protocol Requestable {
 enum APIError: Error {
     case badRequest
     case badData
+    case badCommand
 }
 
-struct OrderBook: Decodable {
-    
-    enum Table: String, Decodable {
-        case l2 = "orderBookL2"
+public extension AnyCodable {
+    func to<T: Decodable>() throws -> T {
+        return try JSONDecoder.shared.decode(T.self, from: JSONEncoder().encode(self))
     }
+}
+
+public struct OrderBookData: Decodable, Identifiable {
+    public var symbol: String
+    public var id: Int64
+    public var side: Side
+    public var size: Int64
+    public var price: Double
+    public var timestamp: Date
+}
+
+public struct TradeData: Decodable, Identifiable {
+    public var timestamp: Date
+    public var symbol: String
+    public var trdMatchID: String
+    public var side: Side
+    public var size: Int64
+    public var price: Double
     
-    enum Action: String, Decodable {
-        case insert
-        case delete
-        case update
+    public var id: String {
+        return trdMatchID
     }
-    
-    enum Side: String, Decodable {
-        case buy = "Buy"
-        case sell = "Sell"
-    }
-    
-    struct Item: Decodable, Identifiable {
-        var symbol: String
-        var id: Int64
-        var side: Side
-        var size: Int64
-        var price: Double
-        var timestamp: String
-    }
-    
+}
+
+public enum Table: String, Decodable {
+    case orderBookL2 = "orderBookL2"
+    case trade = "trade"
+}
+
+public enum Action: String, Decodable {
+    case insert
+    case delete
+    case update
+}
+
+public enum Side: String, Decodable {
+    case buy = "Buy"
+    case sell = "Sell"
+}
+
+public struct WSMessage: Decodable {
     let table: Table
     let action: Action
-    let data: [Item]
+    let data: [AnyCodable]
 }
 
-extension OrderBook: Requestable {
-    static func request() throws -> URLRequest {
-        return try URL.request(["subscribe":"orderBookL2:XBTUSD"])
-    }
+public enum WSOperation: String, Encodable {
+    case subscribe
+}
+
+public enum WSTopic: String, Encodable {
+    case orderBookL2XBTUSD = "orderBookL2:XBTUSD"
+    case tradeXBTUSD = "trade:XBTUSD"
+}
+
+public struct WSCommand: Encodable {
+    let op: String
+    let args: [String]
 }

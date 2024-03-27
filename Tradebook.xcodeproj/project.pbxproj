@@ -19,6 +19,10 @@
 		542CA7AD2BB2A6AB00BD317C /* OrderBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7AC2BB2A6AB00BD317C /* OrderBookView.swift */; };
 		542CA7AF2BB2A7C700BD317C /* OrderBookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7AE2BB2A7C700BD317C /* OrderBookViewModel.swift */; };
 		542CA7B42BB349E800BD317C /* Color+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7B32BB349E800BD317C /* Color+Asset.swift */; };
+		542CA7B72BB3F16300BD317C /* RecentTradesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7B62BB3F16300BD317C /* RecentTradesViewModel.swift */; };
+		542CA7B92BB3F16E00BD317C /* RecentTradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7B82BB3F16E00BD317C /* RecentTradesView.swift */; };
+		542CA7BB2BB3F5F700BD317C /* JSONDecoder+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542CA7BA2BB3F5F700BD317C /* JSONDecoder+Date.swift */; };
+		542CA7BE2BB4067000BD317C /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 542CA7BD2BB4067000BD317C /* AnyCodable */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +38,9 @@
 		542CA7AC2BB2A6AB00BD317C /* OrderBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBookView.swift; sourceTree = "<group>"; };
 		542CA7AE2BB2A7C700BD317C /* OrderBookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBookViewModel.swift; sourceTree = "<group>"; };
 		542CA7B32BB349E800BD317C /* Color+Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Asset.swift"; sourceTree = "<group>"; };
+		542CA7B62BB3F16300BD317C /* RecentTradesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTradesViewModel.swift; sourceTree = "<group>"; };
+		542CA7B82BB3F16E00BD317C /* RecentTradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTradesView.swift; sourceTree = "<group>"; };
+		542CA7BA2BB3F5F700BD317C /* JSONDecoder+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Date.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				542CA7BE2BB4067000BD317C /* AnyCodable in Frameworks */,
 				542CA7A42BB29A3700BD317C /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,10 +75,10 @@
 		542CA78C2BB291C000BD317C /* Tradebook */ = {
 			isa = PBXGroup;
 			children = (
-				542CA7B22BB349DB00BD317C /* Utils */,
 				542CA7A52BB29DC300BD317C /* UI */,
 				542CA79B2BB2973200BD317C /* API */,
 				542CA78D2BB291C000BD317C /* TradebookApp.swift */,
+				542CA7B22BB349DB00BD317C /* Utils */,
 				542CA7912BB291C100BD317C /* Assets.xcassets */,
 				542CA7932BB291C100BD317C /* Preview Content */,
 			);
@@ -89,8 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				542CA79C2BB2974200BD317C /* API.swift */,
-				542CA79E2BB2975700BD317C /* URL+Extensions.swift */,
 				542CA7A02BB298B500BD317C /* Types.swift */,
+				542CA79E2BB2975700BD317C /* URL+Extensions.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -98,6 +106,7 @@
 		542CA7A52BB29DC300BD317C /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				542CA7B52BB3F14700BD317C /* RecentTrades */,
 				542CA7AB2BB2A69A00BD317C /* OrderBook */,
 				542CA7A62BB29DC900BD317C /* Main */,
 			);
@@ -126,8 +135,18 @@
 			isa = PBXGroup;
 			children = (
 				542CA7B32BB349E800BD317C /* Color+Asset.swift */,
+				542CA7BA2BB3F5F700BD317C /* JSONDecoder+Date.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		542CA7B52BB3F14700BD317C /* RecentTrades */ = {
+			isa = PBXGroup;
+			children = (
+				542CA7B82BB3F16E00BD317C /* RecentTradesView.swift */,
+				542CA7B62BB3F16300BD317C /* RecentTradesViewModel.swift */,
+			);
+			path = RecentTrades;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +167,7 @@
 			name = Tradebook;
 			packageProductDependencies = (
 				542CA7A32BB29A3700BD317C /* Starscream */,
+				542CA7BD2BB4067000BD317C /* AnyCodable */,
 			);
 			productName = Tradebook;
 			productReference = 542CA78A2BB291C000BD317C /* Tradebook.app */;
@@ -179,6 +199,7 @@
 			mainGroup = 542CA7812BB291C000BD317C;
 			packageReferences = (
 				542CA7A22BB29A3700BD317C /* XCRemoteSwiftPackageReference "Starscream" */,
+				542CA7BC2BB4067000BD317C /* XCRemoteSwiftPackageReference "AnyCodable" */,
 			);
 			productRefGroup = 542CA78B2BB291C000BD317C /* Products */;
 			projectDirPath = "";
@@ -206,14 +227,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				542CA7B72BB3F16300BD317C /* RecentTradesViewModel.swift in Sources */,
 				542CA7B42BB349E800BD317C /* Color+Asset.swift in Sources */,
 				542CA7AA2BB29DE500BD317C /* MainViewModel.swift in Sources */,
 				542CA7A82BB29DDB00BD317C /* MainView.swift in Sources */,
 				542CA79F2BB2975700BD317C /* URL+Extensions.swift in Sources */,
 				542CA7AD2BB2A6AB00BD317C /* OrderBookView.swift in Sources */,
+				542CA7BB2BB3F5F700BD317C /* JSONDecoder+Date.swift in Sources */,
 				542CA79D2BB2974200BD317C /* API.swift in Sources */,
 				542CA7A12BB298B500BD317C /* Types.swift in Sources */,
 				542CA7AF2BB2A7C700BD317C /* OrderBookViewModel.swift in Sources */,
+				542CA7B92BB3F16E00BD317C /* RecentTradesView.swift in Sources */,
 				542CA78E2BB291C000BD317C /* TradebookApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,6 +456,14 @@
 				minimumVersion = 4.0.8;
 			};
 		};
+		542CA7BC2BB4067000BD317C /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Flight-School/AnyCodable";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.7;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -439,6 +471,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 542CA7A22BB29A3700BD317C /* XCRemoteSwiftPackageReference "Starscream" */;
 			productName = Starscream;
+		};
+		542CA7BD2BB4067000BD317C /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 542CA7BC2BB4067000BD317C /* XCRemoteSwiftPackageReference "AnyCodable" */;
+			productName = AnyCodable;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
